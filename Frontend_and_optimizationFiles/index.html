@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart India Hackathon</title>
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=SUSE:wght@100..800&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: "SUSE", sans-serif;
+      font-optical-sizing: auto;
+      font-weight: auto;
+      font-style: normal;
+    }
+    .navbar {
+      z-index: 1;
+    }
+    
+    .background-section {
+      background: url('https://etvbharatimages.akamaized.net/etvbharat/prod-images/26-09-2023/1200-675-19607830-thumbnail-16x9-sugarcane.jpg') no-repeat center center;
+      background-size: 85%;
+      height: 100vh;
+      position: relative;
+    }
+
+    /* Optional overlay effect */
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.3);
+      /* Adjust opacity here */
+    }
+
+    .float {
+      position: absolute;
+      top: 10%;
+      left: 0;
+      width: 100%;
+      height: 90%;
+      /* Adjust the height to prevent overflow */
+      overflow: hidden;
+    }
+
+    .navbar-nav .nav-link {
+      font-weight: 500;
+      /* Increase font weight */
+    }
+
+    /* Container for image and box */
+    .content-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Image1 styling */
+    .image1 {
+      width: 40%;
+      text-align: center;
+      /* Ensure the image container is centered */
+    }
+
+    .image1 img {
+      width: 100%;
+      max-width: 80%;
+      /* Ensure the image doesn't exceed its container */
+      height: auto;
+      border-radius: 8px;
+    }
+
+    /* Box styling */
+    .box {
+      flex-grow: 1;
+      /* Margin between image1 and the box */
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 20px;
+      border-radius: 8px;
+      height: auto;
+      margin-right: 6%;
+      margin-left: auto;
+    }
+
+    .box p {
+      margin-top: 5px;
+      margin-bottom: 0;
+    }
+
+    .button {
+      display: flex;
+      height: auto;
+      margin-top: 10px;
+      margin-right: auto;
+      margin-left: auto;
+      border-radius: 8px;
+      border-color: transparent;
+      background-color: blue;
+      color: white;
+    }
+
+    /* Media query for small screens */
+    @media (max-width: 900px) {
+      .navbar-brand {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .content-container {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: static;
+        width: 100%;
+        margin-top: -150px; /* Adjusted for better spacing on small screens */
+      }
+
+      .image1 {
+        margin-left: auto;
+        margin-right: auto;
+        width: 80%; /* Adjusted for better fit on small screens */
+      }
+
+      .image1 img {
+        width: 100%;
+      }
+
+      .box {
+        margin-top: 20px; /* Adjusted margin-top for better spacing */
+        width: 90%;
+        max-height: 25vh; /* Ensures the box fits within viewport height */
+        background-color: rgba(255, 255, 255, 0.8);
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .button {
+        margin-top: 10px;
+        padding: 10px 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <!-- Toggler button for responsive design -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">My Aadhaar <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">About UIDAI</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Media & Resources</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Contact & Support</a>
+        </li>
+      </ul>
+      <!-- Image Logo on the right -->
+      <a class="navbar-brand ml-auto" href="#">
+        <img src="https://upload.wikimedia.org/wikipedia/hi/thumb/c/cf/Aadhaar_Logo.svg/1200px-Aadhaar_Logo.svg.png"
+          alt="Logo" width="70" height="46" class="d-inline-block align-top">
+      </a>
+    </div>
+  </nav>
+
+  <!-- Background Section -->
+  <div class="background-section">
+    <div class="overlay"></div>
+  </div>
+  <div class="float">
+    <div class="content-container">
+      <div class="image1">
+        <img src="https://res.cloudinary.com/jerrick/image/upload/v1648701485/6245302dd0b37c001d6c2089.png"
+          alt="Cropped Image">
+      </div>
+      <div class="box">
+        <h3>Guidelines !</h3>
+        <p>Understand Legal Requirements.</p>
+        <p>Data Privacy Laws.</p>
+        <p>Document Verification.</p>
+        <p>Fraud Detection.</p>
+        <p>Informed Consent.</p>
+        <a href="index1.html">
+          <button class="button" >Start Face Recognize</button>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Optional JavaScript; choose one of the two! -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="app.js"></script>
+
+</body>
+
+</html>

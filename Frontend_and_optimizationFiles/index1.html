@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Face Liveness Detection</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=SUSE:wght@100..800&display=swap" rel="stylesheet">
+  <!-- Custom CSS -->
+  <style>
+    body {
+      font-family: "SUSE", sans-serif;
+      font-optical-sizing: auto;
+      font-weight: auto;
+      font-style: normal;
+    }
+
+    .camera-feed {
+      position: relative;
+      width: 640px;
+      /* Set to desired medium size width */
+      height: 360px;
+      background-color: #000;
+      border: 2px solid #007bff;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 812px) {
+      .camera-feed {
+        padding-top: 75%;
+        width: auto;
+        height: auto;
+      }
+    }
+
+    .camera-feed video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .camera-feed canvas {
+      display: none; /* Hide the canvas element */
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container py-5">
+    <!-- Header and Instructions -->
+    <div class="text-center mb-4">
+      <h2>Face Liveness Detection</h2>
+      <p>Please align your face within the frame and follow the instructions.</p>
+    </div>
+
+    <!-- Camera Feed Section -->
+    <div class="camera-feed mx-auto">
+      <video id="cameraFeed" autoplay muted playsinline></video>
+      <canvas id="canvas"></canvas> <!-- Canvas for capturing the image -->
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="text-center mb-3">
+      <button type="button" class="btn btn-primary btn-lg" id="startButton">Start Detection</button>
+    </div>
+
+    <!-- Status Messages and Alerts -->
+    <div class="text-center">
+      <div id="successAlert" class="alert alert-success alert-dismissible fade show" role="alert" style="display: none;">
+        Liveness Verified!
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      <div id="errorAlert" class="alert alert-danger alert-dismissible fade show" role="alert" style="display: none;">
+        Face not detected, please adjust lighting and try again.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+
+    <!-- Progress Indicator -->
+    <div class="text-center mt-3" id="progressIndicator" style="display: none;">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Recognizing liveness...</span>
+      </div>
+      <p>Recognizing liveness...</p>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS Bundle (includes Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom JS -->
+  <script>
+    // Access user's camera and request permissions
+    async function startCamera() {
+      try {
+        const video = document.getElementById('cameraFeed');
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+
+        // Check if the camera stream is available
+        if (stream) {
+          video.srcObject = stream;
+        } else {
+          showErrorMessage('Camera not available.');
+        }
+      } catch (error) {
+        console.error('Error accessing camera:', error);
+        showErrorMessage('Unable to access camera. Please ensure you have granted permission.');
+      }
+    }
+
+    // Show success message
+    function showSuccessMessage(message) {
+      const successAlert = document.getElementById('successAlert');
+      successAlert.textContent = message;
+      successAlert.style.display = 'block';
+    }
+
+    // Show error message
+    function showErrorMessage(message) {
+      const errorAlert = document.getElementById('errorAlert');
+      errorAlert.textContent = message;
+      errorAlert.style.display = 'block';
+    }
+
+    // Capture image from the camera feed and convert it to a base64 string
+    async function getImageFromCameraFeed() {
+      const canvas = document.getElementById('canvas');
+      const video = document.getElementById('cameraFeed');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
+      const context = canvas.getContext('2d');
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      const dataUrl = canvas.toDataURL('image/png');
+      return dataUrl.split(',')[1]; // Return the base64 part of the data URL
+    }
+
+    // Start Detection Button Click Handler
+    document.getElementById('startButton').addEventListener('click', async function () {
+      document.getElementById('successAlert').style.display = 'none';
+      document.getElementById('errorAlert').style.display = 'none';
+      document.getElementById('progressIndicator').style.display = 'block';
+
+      try {
+        const image = await getImageFromCameraFeed();
+
+        // Send the image to the backend
+        const response = await fetch('/detect', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ image: image })
+        });
+
+        const data = await response.json();
+        document.getElementById('progressIndicator').style.display = 'none';
+        
+        if (data.status === 'success') {
+          showSuccessMessage(data.message);
+        } else {
+          showErrorMessage(data.message);
+        }
+      } catch (error) {
+        document.getElementById('progressIndicator').style.display = 'none';
+        showErrorMessage('Error: ' + error.message);
+      }
+    });
+
+    // Initialize camera on page load
+    window.addEventListener('load', startCamera);
+  </script>
+</body>
+
+</html>
